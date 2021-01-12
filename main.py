@@ -5,6 +5,7 @@
 # imports
 import pygame, random, os, time, sys, pickle
 from random import randint
+from pygame import mixer
 
 # pygame settings
 windowWidth = 900
@@ -22,13 +23,16 @@ cactusWidth = 50
 dinoX = 100
 cactusSpeed = 10
 
-# clock
+# init
 clock = pygame.time.Clock()
+mixer.init()
 
-# images
+# assets
 cactusImg = pygame.transform.scale(pygame.image.load(os.path.join("assets","cactus.png")), (cactusWidth, cactusHeight))
 dinoImg = pygame.transform.scale(pygame.image.load(os.path.join("assets","dino.png")), (dinoWidth, dinoHeight))
 baseImg = pygame.image.load(os.path.join("assets","base.png"))
+jumpSound = mixer.Sound("assets/jump.wav")
+jumpSound.set_volume(0.05)
 
 # fonts
 pygame.font.init()
@@ -46,10 +50,10 @@ class dino:
         self.ySpeed = 0
     def jump(self):
         self.ySpeed = 0-jumpPower
+        jumpSound.play()
     def move(self):  
         self.ySpeed += gravity
         self.y += self.ySpeed
-
 
 # cactus class
 class cactus:
@@ -98,11 +102,11 @@ while running:
 
     if died == False:
         restart(started)
+    
     # background
     pygame.draw.rect(screen, backgroundColor, (0,0,windowWidth, windowHeight))
 
-    running = getInputs()
-
+    running = getInputs() # if return is false then user wants to quit; end while loop
     d1.move()
 
     # y collision detection
