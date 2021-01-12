@@ -3,7 +3,7 @@
 # jan 1 2020
 
 # imports
-import pygame, random, os, time, sys, pickle
+import pygame, random, os, time, sys, pickle, keyboard
 from random import randint
 from pygame import mixer
 
@@ -15,13 +15,14 @@ dinoWidth = 60
 backgroundColor = (200,200,200)
 
 # game settings
-gameSpeed = 30
+gameSpeed = 65
 gravity = 0.8
 jumpPower = 15
 cactusHeight = 75
 cactusWidth = 50
 dinoX = 100
 cactusSpeed = 10
+scoreColor = (0,0,0)
 
 # init
 clock = pygame.time.Clock()
@@ -32,7 +33,7 @@ cactusImg = pygame.transform.scale(pygame.image.load(os.path.join("assets","cact
 dinoImg = pygame.transform.scale(pygame.image.load(os.path.join("assets","dino.png")), (dinoWidth, dinoHeight))
 baseImg = pygame.image.load(os.path.join("assets","base.png"))
 jumpSound = mixer.Sound("assets/jump.wav")
-jumpSound.set_volume(0.05)
+jumpSound.set_volume(0.01)
 
 # fonts
 pygame.font.init()
@@ -70,11 +71,10 @@ def getInputs():
         if event.type == pygame.QUIT:
             running = False
         # if key is pressed
-        if event.type == pygame.KEYDOWN:
-            # if space is pressed
-            if event.key == pygame.K_SPACE or event.key == pygame.K_UP:
-                if d1.y >= windowHeight - dinoHeight:
-                    d1.jump()
+                        
+        if keyboard.is_pressed('space'):  # if key 'q' is pressed 
+            if d1.y >= windowHeight - dinoHeight:
+                d1.jump()
     return(running)
 
 def restart(started):
@@ -138,9 +138,9 @@ while running:
             cactuss.remove(cactuss[0])
 
     # score onto screen
-    score_label = font.render("Score: " + str(score),1,(255,255,255))
+    score_label = font.render("Score: " + str(score),1,(scoreColor))
     screen.blit(score_label, (10, 10))
-    highScoreLabel = font.render("High Score: "+str(highScore),1,(255,255,255))
+    highScoreLabel = font.render("High Score: "+str(highScore),1,(scoreColor))
     screen.blit(highScoreLabel, (10, 50))
 
     # dino onto screen
