@@ -78,12 +78,13 @@ def getInputs():
     return(running)
 
 def restart(started):
-    global d1, cactuss, died, score, highScore
+    global d1, cactuss, died, score, highScore, scoreDelay
     d1 = dino(dinoX,windowHeight-dinoHeight)
     cactuss = []
     cactuss.append(cactus(windowHeight - cactusHeight,windowWidth))
     died = True
     score = 0
+    scoreDelay = 0
     if started == False:
         if score > highScore:
             highScore = score
@@ -146,7 +147,11 @@ while running:
     # dino onto screen
     screen.blit(dinoImg,(d1.x,d1.y))
     # score
-    score += 1
+    if scoreDelay < 3:
+        scoreDelay += 1
+    else:
+        score += 1
+        scoreDelay = 0
 
     # final update to the screen
     clock.tick(gameSpeed)
