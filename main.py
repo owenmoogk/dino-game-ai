@@ -47,8 +47,9 @@ class Dino:
         self.y = y
         self.ySpeed = 0
     def jump(self):
-        self.ySpeed = 0-jumpPower
-        jumpSound.play()
+        if d1.y >= windowHeight - dinoHeight:
+            self.ySpeed = 0-jumpPower
+            jumpSound.play()
     def move(self):  
         self.ySpeed += gravity
         self.y += self.ySpeed
@@ -73,15 +74,16 @@ class Bird():
         self.y = y
         self.x = x
 
+
 def getInputs():
     events = pygame.event.get()
     for event in events:
         # if x button pressed stop just break out of these loops
         if event.type == pygame.QUIT:
-            quit()      
-        if keyboard.is_pressed('space'):
-            if d1.y >= windowHeight - dinoHeight:
-                d1.jump()
+            quit()
+    keys = pygame.key.get_pressed()  # checking pressed keys
+    if keys[pygame.K_SPACE]:             
+        d1.jump()
 
 def restart(started):
     global d1, cacti, died, score, highScore
