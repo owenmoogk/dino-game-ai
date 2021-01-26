@@ -14,9 +14,9 @@ backgroundColor = (200,200,200)
 
 # game settings
 gameSpeed = 65
-gravity = 0.8
-jumpPower = 15
-cactusHeight = 75
+gravity = 1.5
+jumpPower = 22.5
+cactusHeight = 50
 cactusWidth = 50
 dinoX = 100
 cactusSpeed = 10
