@@ -139,7 +139,7 @@ def renderScreen(dinos, enemies):
     screen.blit(score_label, (10, 90))
 
 def appendEnemy():
-    global chosenTimeDelay
+    global chosenTickDelay
     if score < 1000:
         enemies.append(Cactus(windowHeight - cactusHeight, windowWidth))
     else:
@@ -154,19 +154,20 @@ def appendEnemy():
         else:
             enemies.append(Cactus(windowHeight - cactusHeight, windowWidth))
     if score > 5000:
-        chosenTimeDelay = random.uniform(0.6,0.85)
+        chosenTickDelay = random.uniform(0.6 * gameSpeed, 0.85 * gameSpeed)
     elif score > 2500:
-        chosenTimeDelay = random.uniform(0.7,1)
+        chosenTickDelay = random.uniform(0.7 * gameSpeed, 1 * gameSpeed)
     else:
-        chosenTimeDelay = random.uniform(0.8,1.2)
+        chosenTickDelay = random.uniform(0.8 * gameSpeed, 1.2 * gameSpeed)
 
 def eval_genomes(genomes, config):
 
-    global gen, lastCactusTime, dinos, score, enemies
+    global gen, lastCactusTime, dinos, score, enemies, chosenTickDelay
     enemies = []
     enemies.append(Cactus(windowHeight - cactusHeight,windowWidth))
     score = 0
-    chosenTimeDelay = 1
+    chosenTickDelay = 0
+    timeSinceLastCactus = 0
     lastCactusTime = time.time()
  
     gen += 1
@@ -185,21 +186,22 @@ def eval_genomes(genomes, config):
 
     # main running loop
     while len(dinos) > 0:
+        clock.tick(gameSpeed)
+
         # changing the cactus speed based on score
         cactusSpeed = cactusBaseSpeed + (cactusBaseSpeed * (score / 2000))
 
-        if doClose() == False:
-            quit()
+        doClose()
 
         pipe_ind = 0
         if len(dinos) > 0:
             if len(enemies) > 1 and enemies[0].x > enemies[0].x + cactusWidth:
                 pipe_ind = 1
 
-        timeSinceLastCactus = time.time() - lastCactusTime
-        if timeSinceLastCactus >= chosenTimeDelay:
+        timeSinceLastCactus += 1
+        if timeSinceLastCactus >= chosenTickDelay:
             appendEnemy()
-            lastCactusTime = time.time()
+            timeSinceLastCactus = 0
 
         for x, dino in enumerate(dinos):
             ge[x].fitness += 0.1
@@ -236,7 +238,6 @@ def eval_genomes(genomes, config):
 
         score += 1
         renderScreen(dinos, enemies)
-        clock.tick(gameSpeed)
         pygame.display.update()
 
 def run(config_file):
