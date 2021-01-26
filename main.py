@@ -1,8 +1,8 @@
 # owen moogk
 # ai dino game
 
-import pygame, random, os, time, sys, pickle, keyboard
-from random import randint
+import pygame, random, os, time, sys, pickle, keyboard, time
+from random import uniform
 from pygame import mixer
 
 # pygame settings
@@ -19,7 +19,8 @@ jumpPower = 22.5
 cactusHeight = 70
 cactusWidth = 40
 dinoX = 100
-cactusSpeed = 13
+cactusBaseSpeed = 13
+cactusSpeed = cactusBaseSpeed
 scoreColor = (0,0,0)
 
 # init
@@ -74,7 +75,6 @@ class Bird():
         self.y = y
         self.x = x
 
-
 def getInputs():
     events = pygame.event.get()
     for event in events:
@@ -86,46 +86,48 @@ def getInputs():
         d1.jump()
 
 def restart(started):
-    global d1, cacti, died, score, highScore
+    global d1, cacti, died, score, lastCactusTime, chosenTimeDelay
     d1 = Dino(dinoX,windowHeight-dinoHeight)
     cacti = []
     cacti.append(Cactus(windowHeight - cactusHeight,windowWidth))
     died = False
     score = 0
-    if started == False:
-        if score > highScore:
-            highScore = score
-            pickle.dump(highScore, open("highscore.dat", "wb"))
-    else:
-        highScore = pickle.load(open("highscore.dat", "rb"))
-        started = True
+    chosenTimeDelay = 1
+    lastCactusTime = time.time()
 
 def renderScreen(dino, cacti):
     pygame.draw.rect(screen, backgroundColor, (0,0,windowWidth, windowHeight))
     screen.blit(dinoImg,(dino.x,dino.y))
     for cactus in cacti:
         screen.blit(cactusImg,(cactus.x,cactus.y))
-
-    # scores
+    # score
     score_label = font.render("Score: " + str(score),1,(scoreColor))
     screen.blit(score_label, (10, 10))
-    highScoreLabel = font.render("High Score: "+str(highScore),1,(scoreColor))
-    screen.blit(highScoreLabel, (10, 50))
+
+def appendCactus():
+    global chosenTimeDelay
+    cacti.append(Cactus(windowHeight - cactusHeight, windowWidth))
+    chosenTimeDelay = random.uniform(0.8,1.2)
 
 started = True
 restart(started)
 
 # main running loop
 while True:
+
+    cactusSpeed = cactusBaseSpeed + (cactusBaseSpeed * (score / 2000))
+    print(cactusSpeed)
+
     if died == True:
         restart(started)
     if getInputs() == False:
         quit()
     d1.move()
 
-    # if the forward most cactus is off screen then delete
-    if cacti[len(cacti)-1].x < windowWidth - 400:
-        cacti.append(Cactus(windowHeight - cactusHeight, windowWidth))
+    timeSinceLastCactus = time.time() - lastCactusTime
+    if timeSinceLastCactus >= chosenTimeDelay:
+        appendCactus()
+        lastCactusTime = time.time()
 
     for cactus in cacti:
         cactus.move()
