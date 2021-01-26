@@ -184,11 +184,10 @@ def eval_genomes(genomes, config):
 
 
     # main running loop
-    ticks = 0
     while len(dinos) > 0:
         # changing the cactus speed based on score
         cactusSpeed = cactusBaseSpeed + (cactusBaseSpeed * (score / 2000))
-        ticks += 1
+
         if doClose() == False:
             quit()
 
@@ -197,10 +196,10 @@ def eval_genomes(genomes, config):
             if len(enemies) > 1 and enemies[0].x > enemies[0].x + cactusWidth:
                 pipe_ind = 1
 
-        ticksSinceLastCactus = ticks - lastCactusTime
+        timeSinceLastCactus = time.time() - lastCactusTime
         if timeSinceLastCactus >= chosenTimeDelay:
             appendEnemy()
-            lastCactusTime = 
+            lastCactusTime = time.time()
 
         for x, dino in enumerate(dinos):
             ge[x].fitness += 0.1
