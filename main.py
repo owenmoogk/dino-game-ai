@@ -6,20 +6,20 @@ from random import randint
 from pygame import mixer
 
 # pygame settings
-windowWidth = 900
+windowWidth = 1400
 windowHeight = 600
 dinoHeight = 60
 dinoWidth = 60
 backgroundColor = (200,200,200)
 
 # game settings
-gameSpeed = 65
+gameSpeed = 60 
 gravity = 1.5
 jumpPower = 22.5
-cactusHeight = 50
-cactusWidth = 50
+cactusHeight = 70
+cactusWidth = 40
 dinoX = 100
-cactusSpeed = 10
+cactusSpeed = 13
 scoreColor = (0,0,0)
 
 # init
