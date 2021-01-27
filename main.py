@@ -155,9 +155,7 @@ def appendEnemy():
                 enemies.append(Bird(windowHeight - birdY * birdHeight - 5, windowWidth, birdY))
         else:
             enemies.append(Cactus(windowHeight - cactusHeight, windowWidth))
-    if score > 5000:
-        chosenTickDelay = random.uniform(0.6 * gameSpeed, 0.85 * gameSpeed)
-    elif score > 2500:
+    if score > 2500:
         chosenTickDelay = random.uniform(0.7 * gameSpeed, 1 * gameSpeed)
     else:
         chosenTickDelay = random.uniform(0.8 * gameSpeed, 1.2 * gameSpeed)
