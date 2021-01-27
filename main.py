@@ -140,7 +140,9 @@ def renderScreen(dinos, enemies):
 
 def appendEnemy():
     global chosenTickDelay
-    if score < 1000:
+    if score < 100:
+        enemies.append(Bird(windowHeight - 3 * birdHeight - 55, windowWidth, 3))
+    elif score < 200:
         enemies.append(Cactus(windowHeight - cactusHeight, windowWidth))
     else:
         # chance of spawning a bird
@@ -164,7 +166,6 @@ def eval_genomes(genomes, config):
 
     global gen, lastCactusTime, dinos, score, enemies, chosenTickDelay
     enemies = []
-    enemies.append(Cactus(windowHeight - cactusHeight,windowWidth))
     score = 0
     chosenTickDelay = 0
     timeSinceLastCactus = 0
@@ -186,7 +187,7 @@ def eval_genomes(genomes, config):
 
     # main running loop
     while len(dinos) > 0:
-        clock.tick(gameSpeed)
+        # clock.tick(gameSpeed)
 
         # changing the cactus speed based on score
         cactusSpeed = cactusBaseSpeed + (cactusBaseSpeed * (score / 2000))
@@ -252,7 +253,7 @@ def run(config_file):
     p.add_reporter(stats)
 
     # Run for up to 50 generations.
-    winner = p.run(eval_genomes, 50)
+    winner = p.run(eval_genomes, 500)
 
     # show final stats
     print('\nBest genome:\n{!s}'.format(winner))
