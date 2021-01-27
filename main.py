@@ -124,7 +124,7 @@ def getInputs():
     else:
         d1.unduck()
 
-def restart(started):
+def restart():
     global d1, enemies, died, score, lastCactusTime, chosenTimeDelay
     d1 = Dino(dinoX,windowHeight-dinoDefaultHeight)
     enemies = []
@@ -149,11 +149,11 @@ def appendEnemy():
         enemies.append(Cactus(windowHeight - cactusHeight, windowWidth))
     else:
         # chance of spawning a bird
-        randomNum = randint(0,5)
+        randomNum = randint(0,2)
         if randomNum == 0:
             birdY = randint(1,3)
             if birdY == 3:
-                enemies.append(Bird(windowHeight - birdY * birdHeight - 55, windowWidth))
+                enemies.append(Bird(windowHeight - birdY * birdHeight - 60, windowWidth))
             else:
                 enemies.append(Bird(windowHeight - birdY * birdHeight - 5, windowWidth))
         else:
@@ -165,15 +165,14 @@ def appendEnemy():
     else:
         chosenTimeDelay = random.uniform(0.8,1.2)
 
-started = True
-restart(started)
+restart()
 
 # main running loop
 while True:
     # changing the cactus speed based on score
     cactusSpeed = cactusBaseSpeed + (cactusBaseSpeed * (score / 2000))
     if died == True:
-        restart(started)
+        restart()
     if getInputs() == False:
         quit()
 
