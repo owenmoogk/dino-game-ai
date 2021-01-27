@@ -208,6 +208,10 @@ def eval_genomes(genomes, config):
 
             # send bird location, top pipe location and bottom pipe location and determine from network whether to jump or not
             enemyId = enemies[pipe_ind].level
+            if enemyId == 3:
+                enemyId = 0
+            else:
+                enemyId = 1
             output = nets[dinos.index(dino)].activate((dino.y, abs(dino.x - enemies[pipe_ind].x), enemyId))
 
             if output[0] > 0.5:  # we use a tanh activation function so result will be between -1 and 1
